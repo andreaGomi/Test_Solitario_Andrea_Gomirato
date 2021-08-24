@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TableManager : MonoBehaviour
 {
+
 	[SerializeField] RectTransform tableau;
 	[SerializeField] RectTransform pile;
 	[SerializeField] RectTransform foundation;
@@ -29,7 +30,9 @@ public class TableManager : MonoBehaviour
 		{
 			if (!cardHelded)
 			{
-				RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+				//Vector3 mousePosWS = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y)); 
+				Vector3 mousePosWS = Camera.main.ScreenToWorldPoint(Input.mousePosition); 
+				RaycastHit2D hit = Physics2D.Raycast(mousePosWS, Vector2.zero);
 
 				if(hit)
 				{

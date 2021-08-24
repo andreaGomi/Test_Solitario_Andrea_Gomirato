@@ -3,36 +3,70 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum CardColor
+{
+	Black,
+	Red
+}
+
+public enum CardSuits
+{
+	Hearts,
+	Diamonds,
+	Clubs,
+	Spades
+}
+
 public class CardBehaviour : MonoBehaviour
 {
-	[SerializeField] CardSO cardSO;
-	[SerializeField] Material backMat;
-	[SerializeField] Material frontMat;
+	int value;
+	CardColor color;
+	CardSuits suits;
+
+	Material frontMat;
+	Material backMat;
+
+	Transform anchorPoint;
+
+	//Initilization
+	private void Start()
+	{
+		value = -1;
+		anchorPoint = null;
+		color = default;
+		suits = default;
+	}
+
+	//Interface
+	public void SetCardAttributes(int val, CardColor cardColor, CardSuits cardSuits, Material face, Material back)
+	{
+		value = val;
+		color = cardColor;
+		suits = cardSuits;
+
+		frontMat = face;
+		backMat = back;
+		
+		//Debug.Log("Created " + value + " " + cardSuits.ToString());
+	}
+	
+	public void ApplyMaterialsChanges()
+	{
+		GetComponent<SpriteRenderer>().sharedMaterial = frontMat;
+	}
 
 	public int GetCardValue()
 	{
-		return cardSO.value;
+		return value;
 	}
 
 	public CardColor GetCardColor()
 	{
-		return cardSO.color;
+		return color;
 	}
 
-	public CardSuits GetCardSuit()
+	public CardSuits GetCardSuits()
 	{
-		return cardSO.suit;
-	}
-
-	public void AttachVertically(RectTransform newParent)
-	{
-		RectTransform thisTrans = GetComponent<RectTransform>();
-		thisTrans.localPosition = new Vector3(0f, -GameManager.verticalPadding, 0f);
-	}
-
-	public void AttachHorizontally(RectTransform newParent)
-	{
-		RectTransform thisTrans = GetComponent<RectTransform>();
-		thisTrans.localPosition = new Vector3(GameManager.horizontalPadding, 0f, 0f);
+		return suits;
 	}
 }
