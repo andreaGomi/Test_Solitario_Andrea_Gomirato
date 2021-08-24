@@ -6,6 +6,8 @@ using UnityEngine.Events;
 public class CardBehaviour : MonoBehaviour
 {
 	[SerializeField] CardSO cardSO;
+	[SerializeField] Material backMat;
+	[SerializeField] Material frontMat;
 
 	public int GetCardValue()
 	{

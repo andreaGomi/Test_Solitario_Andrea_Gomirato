@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8803833903369485350}
   - component: {fileID: -3290218601221718551}
   m_Layer: 5
-  m_Name: CardSample
+  m_Name: UICardSample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
