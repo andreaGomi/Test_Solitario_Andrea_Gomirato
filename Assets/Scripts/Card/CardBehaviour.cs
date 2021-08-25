@@ -17,10 +17,21 @@ public enum CardSuits
 	Spades
 }
 
+public enum TableZone
+{
+	Deck,
+	Waste, 
+	Tableau,
+	Foundation
+}
+
 public class CardBehaviour : MonoBehaviour
 {
-	public bool IsCurrentlyHelded { get; set; } = false;
 	public Vector3 AnchorPoint { get; set; }
+	public bool isSelectable { get; set; } = false;
+	//public bool isSelectable = false;
+	public bool IsCurrentlyHelded { get; set; } = false;
+	public TableZone Zone { get; set; }
 
 	int value;
 	CardColor color;
@@ -50,11 +61,12 @@ public class CardBehaviour : MonoBehaviour
 	}
 
 	//Interface
-	public void SetCardAttributes(int val, CardColor cardColor, CardSuits cardSuits, Material face, Material back)
+	public void SetCardAttributes(int val, CardColor cardColor, CardSuits cardSuits, TableZone tZone, Material face, Material back)
 	{
 		value = val;
 		color = cardColor;
 		suits = cardSuits;
+		Zone = tZone;
 
 		frontMat = face;
 		backMat = back;

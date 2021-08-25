@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
 		{
 			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
 			newCard.name = "" + index + " Clubs";
-			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Black, CardSuits.Clubs, clubs[index - 1], cardBack);
+			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Black, CardSuits.Clubs, TableZone.Deck, clubs[index - 1], cardBack);
 			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
 			deck.Add(newCard);
 
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
 		{
 			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
 			newCard.name = "" + index + " Hearts";
-			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Red, CardSuits.Hearts, hearts[index -1], cardBack);
+			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Red, CardSuits.Hearts, TableZone.Deck, hearts[index -1], cardBack);
 			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
 			deck.Add(newCard);
 
@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
 		{
 			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
 			newCard.name = "" + index + " Diamonds";
-			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Red, CardSuits.Diamonds, diamonds[index -1], cardBack);
+			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Red, CardSuits.Diamonds, TableZone.Deck, diamonds[index -1], cardBack);
 			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
 			deck.Add(newCard);
 
@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
 		{
 			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
 			newCard.name = "" + index + " Spades";
-			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Black, CardSuits.Spades, spades[index -1], cardBack);
+			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Black, CardSuits.Spades, TableZone.Deck, spades[index -1], cardBack);
 			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
 			deck.Add(newCard);
 
@@ -129,7 +129,11 @@ public class GameManager : MonoBehaviour
 				CardBehaviour card = deck[i + j].GetComponent<CardBehaviour>();
 				deck.Remove(card.gameObject);
 				card.AnchorPoint = tableau.GetChild(i).position + new Vector3(0f, -verticalPadding * j, -depthPadding * j);
-				if (j == i) card.SwapCardMaterial();
+				if (j == i)
+				{
+					card.SwapCardMaterial();
+					card.isSelectable = true;
+				}
 				card.ReplaceCard();
 			}
 		}

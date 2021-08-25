@@ -4,15 +4,30 @@ using UnityEngine;
 
 public class TableauBehaviour : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	bool occupied;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private void Start()
+	{
+		occupied = true;
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (occupied)
+			return;
+
+		CardBehaviour enteringCard = collision.GetComponent<CardBehaviour>();
+		if (enteringCard.GetCardValue() != 13)
+			return;
+
+		occupied = true;
+		enteringCard.AnchorPoint = transform.position;
+		enteringCard.Zone = TableZone.Tableau;
+		enteringCard.ReplaceCard();
+	}
+
+	private void OnTriggerExit2D(Collider2D collision)
+	{
+		occupied = false;
+	}
 }

@@ -67,7 +67,7 @@ public class FoundationBehaviour : MonoBehaviour
 			{
 				pile.Add(cardEntered);
 				cardEntered.AnchorPoint = transform.position;
-				Debug.Log(cardEntered.AnchorPoint);
+				//Debug.Log(cardEntered.AnchorPoint);
 				cardEntered.ReplaceCard();
 			}
 		}

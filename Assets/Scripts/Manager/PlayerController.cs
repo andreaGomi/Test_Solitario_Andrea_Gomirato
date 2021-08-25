@@ -21,33 +21,43 @@ public class PlayerController : MonoBehaviour
 
 	private void ManageInput()
 	{
-		if (Input.GetMouseButton(0))
+		if (!cardHelded)//No Card currently helded
 		{
-			Vector3 mousePosWS = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
-			if (!cardHelded)
+			if (Input.GetMouseButtonDown(0))
 			{
-				RaycastHit2D hit = Physics2D.Raycast(mousePosWS, Vector2.zero, layerMask);
-				if (hit && hit.collider.CompareTag("Card")){
-					cardHelded = hit.collider.gameObject;
-					cardHelded.GetComponent<CardBehaviour>().IsCurrentlyHelded = true;
-					cardHelded.GetComponent<SpriteRenderer>().sortingOrder = 1;
+				Vector3 mousePosWS = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
+				if (!cardHelded)
+				{
+					RaycastHit2D hit = Physics2D.Raycast(mousePosWS, Vector2.zero, layerMask);
+					if (hit && hit.collider.CompareTag("Card"))
+					{
+
+						if (!hit.collider.gameObject.GetComponent<CardBehaviour>().isSelectable)
+							return;
+
+						cardHelded = hit.collider.gameObject;
+						cardHelded.GetComponent<CardBehaviour>().IsCurrentlyHelded = true;
+						cardHelded.GetComponent<SpriteRenderer>().sortingOrder = 1;
+					}
 				}
+			}
+		
+		}
+		else// A Card is helded
+		{
+			if (Input.GetMouseButtonUp(0))
+			{
+				cardHelded.GetComponent<SpriteRenderer>().sortingOrder = 0;
+				CardBehaviour currentCard = cardHelded.GetComponent<CardBehaviour>();
+				currentCard.ReplaceCard();
+				currentCard.IsCurrentlyHelded = false;
+				cardHelded = null;
 			}
 			else
 			{
+				Vector3 mousePosWS = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
 				cardHelded.transform.position = mousePosWS;
 			}
-		}
-		else
-		{
-			if (!cardHelded)
-				return;
-
-			cardHelded.GetComponent<SpriteRenderer>().sortingOrder = 0;
-			CardBehaviour currentCard = cardHelded.GetComponent<CardBehaviour>();
-			currentCard.ReplaceCard();
-			currentCard.IsCurrentlyHelded = false;
-			cardHelded = null;
 		}
 	}
 }
