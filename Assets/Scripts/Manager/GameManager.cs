@@ -7,7 +7,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	[Header("Table")]
-	[SerializeField] Transform DeckPosition;
+	[SerializeField] Transform deckPosition;
+	[SerializeField] Transform tableau;
 
 	[Header("Materials")]
 	public Material[] hearts; 
@@ -21,12 +22,12 @@ public class GameManager : MonoBehaviour
 
 	public static float verticalPadding = .5f;
 	public static float horizontalPadding = .3f;
-	public static float depthPadding = .03f;
+	public static float depthPadding = .01f;
 
 	public static GameManager Instance { get; private set; } = null;
 
-	[SerializeField] private GameObject[] deck;
-	public GameObject[] Deck { get { return deck; } }
+	[SerializeField] List<GameObject> deck;
+	public List<GameObject> Deck { get { return deck; } }
 
 	private void Awake()
 	{
@@ -40,14 +41,68 @@ public class GameManager : MonoBehaviour
 	
 	void Start()
     {
-		deck = new GameObject[52];
+		deck = new List<GameObject>();
 		GenerateCards();
 		ShuffleDeck();
+		PlaceCards();
     }
 
 	void Update()
 	{
 
+	}
+
+	private void GenerateCards()
+	{
+		int index = 1;
+		Vector3 pos = deckPosition.position;
+		foreach(Material mat in clubs)
+		{
+			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
+			newCard.name = "" + index + " Clubs";
+			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Black, CardSuits.Clubs, clubs[index - 1], cardBack);
+			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
+			deck.Add(newCard);
+
+			pos += new Vector3(0f, 0f, -depthPadding);
+			index++;
+		}
+		index = 1;
+		foreach (Material mat in hearts)
+		{
+			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
+			newCard.name = "" + index + " Hearts";
+			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Red, CardSuits.Hearts, hearts[index -1], cardBack);
+			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
+			deck.Add(newCard);
+
+			pos += new Vector3(0f, 0f, -depthPadding);
+			index++;
+		}
+		index = 1;
+		foreach (Material mat in diamonds)
+		{
+			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
+			newCard.name = "" + index + " Diamonds";
+			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Red, CardSuits.Diamonds, diamonds[index -1], cardBack);
+			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
+			deck.Add(newCard);
+
+			pos += new Vector3(0f, 0f, -depthPadding);
+			index++;
+		}
+		index = 1;
+		foreach (Material mat in spades)
+		{
+			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
+			newCard.name = "" + index + " Spades";
+			newCard.GetComponent<CardBehaviour>().SetCardAttributes(index, CardColor.Black, CardSuits.Spades, spades[index -1], cardBack);
+			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
+			deck.Add(newCard);
+
+			pos += new Vector3(0f, 0f, -depthPadding);
+			index++;
+		}
 	}
 
 	private void ShuffleDeck()
@@ -65,71 +120,18 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void GenerateCards()
+	private void PlaceCards()
 	{
-		int index = 0;
-		Vector3 pos = new Vector3(-1.5f, 0f, -depthPadding);
-		foreach(Material mat in clubs)
+		for(int i = 0; i < tableau.childCount; i++)
 		{
-			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
-			newCard.name = "" + ((index % 13) + 1) + " Clubs";
-			newCard.GetComponent<CardBehaviour>().SetCardAttributes((index % 13) + 1, CardColor.Black, CardSuits.Clubs, clubs[(index % 13)], cardBack);
-			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
-			deck[index] = newCard;
-
-			pos.y -= verticalPadding;
-			pos.z -= depthPadding;
-
-			index++;
-		}
-		pos.x += 1.5f;
-		pos.y = 0f;
-		pos.z = 0f;
-		foreach (Material mat in hearts)
-		{
-			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
-			newCard.name = "" + ((index % 13) + 1) + " Hearts";
-			newCard.GetComponent<CardBehaviour>().SetCardAttributes((index % 13) + 1, CardColor.Red, CardSuits.Hearts, hearts[(index % 13)], cardBack);
-			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
-			deck[index] = newCard;
-
-			pos.y -= verticalPadding;
-			pos.z -= depthPadding;
-
-			index++;
-		}
-		pos.x += 1.5f;
-		pos.y = 0f;
-		pos.z = 0f;
-		foreach (Material mat in diamonds)
-		{
-			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
-			newCard.name = "" + ((index % 13) + 1) + " Diamonds";
-			newCard.GetComponent<CardBehaviour>().SetCardAttributes((index % 13) + 1, CardColor.Red, CardSuits.Diamonds, diamonds[(index % 13)], cardBack);
-			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
-			deck[index] = newCard;
-
-			pos.y -= verticalPadding;
-			pos.z -= depthPadding;
-
-			index++;
-		}
-		pos.x += 1.5f;
-		pos.y = 0f;
-		pos.z = 0f;
-		foreach (Material mat in spades)
-		{
-			GameObject newCard = Instantiate(cardPrefab, pos, Quaternion.identity);
-			newCard.name = "" + ((index % 13) + 1) + " Spades";
-			newCard.GetComponent<CardBehaviour>().SetCardAttributes((index % 13) + 1, CardColor.Black, CardSuits.Spades, spades[(index % 13)], cardBack);
-			newCard.GetComponent<CardBehaviour>().SwapCardMaterial();
-			deck[index] = newCard;
-
-			//pos.x += horizontalPadding;
-			pos.y -= verticalPadding;
-			pos.z -= depthPadding;
-
-			index++;
+			for(int j = 0; j <= i; j++)
+			{
+				CardBehaviour card = deck[i + j].GetComponent<CardBehaviour>();
+				deck.Remove(card.gameObject);
+				card.AnchorPoint = tableau.GetChild(i).position + new Vector3(0f, -verticalPadding * j, -depthPadding * j);
+				if (j == i) card.SwapCardMaterial();
+				card.ReplaceCard();
+			}
 		}
 	}
 }

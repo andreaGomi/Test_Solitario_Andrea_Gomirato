@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TableManager : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
+	[SerializeField] LayerMask layerMask;
 	private GameObject cardHelded = null;
 	
     void Start()
@@ -25,7 +26,7 @@ public class TableManager : MonoBehaviour
 			Vector3 mousePosWS = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
 			if (!cardHelded)
 			{
-				RaycastHit2D hit = Physics2D.Raycast(mousePosWS, Vector2.zero);
+				RaycastHit2D hit = Physics2D.Raycast(mousePosWS, Vector2.zero, layerMask);
 				if (hit && hit.collider.CompareTag("Card")){
 					cardHelded = hit.collider.gameObject;
 					cardHelded.GetComponent<CardBehaviour>().IsCurrentlyHelded = true;

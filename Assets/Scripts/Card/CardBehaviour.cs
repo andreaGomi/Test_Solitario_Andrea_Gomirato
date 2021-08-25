@@ -31,7 +31,6 @@ public class CardBehaviour : MonoBehaviour
 	int currentMatIndex;
 
 	bool currentlyMoving;
-	float cardAnimSpeed;
 
 	//Initilization
 	private void Awake()
@@ -39,11 +38,10 @@ public class CardBehaviour : MonoBehaviour
 		value = -1;
 		color = default;
 		suits = default;
-		currentMatIndex = 1;
+		currentMatIndex = 0;	// 0 -> Face Material, 1 -> Back Material
 
 		currentlyMoving = false;
 		AnchorPoint = transform.position;
-		cardAnimSpeed = 20f;
 	}
 
 	private void Start()

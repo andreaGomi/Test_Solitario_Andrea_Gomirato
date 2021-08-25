@@ -14,7 +14,6 @@ public class FoundationBehaviour : MonoBehaviour
     void Start()
     {
 		pile = new List<CardBehaviour>();
-		Debug.Log("Pos: " + suits.ToString() + transform.position);
     }
 
 	private void OnTriggerEnter2D(Collider2D collision)
