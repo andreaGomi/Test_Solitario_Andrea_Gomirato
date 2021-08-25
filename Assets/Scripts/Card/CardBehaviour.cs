@@ -19,22 +19,36 @@ public enum CardSuits
 
 public class CardBehaviour : MonoBehaviour
 {
+	public bool IsCurrentlyHelded { get; set; } = false;
+	public Vector3 AnchorPoint { get; set; }
+
 	int value;
 	CardColor color;
 	CardSuits suits;
 
 	Material frontMat;
 	Material backMat;
+	int currentMatIndex;
 
-	Transform anchorPoint;
+	bool currentlyMoving;
+	float cardAnimSpeed;
 
 	//Initilization
-	private void Start()
+	private void Awake()
 	{
 		value = -1;
-		anchorPoint = null;
 		color = default;
 		suits = default;
+		currentMatIndex = 1;
+
+		currentlyMoving = false;
+		AnchorPoint = transform.position;
+		cardAnimSpeed = 20f;
+	}
+
+	private void Start()
+	{
+		
 	}
 
 	//Interface
@@ -50,9 +64,11 @@ public class CardBehaviour : MonoBehaviour
 		//Debug.Log("Created " + value + " " + cardSuits.ToString());
 	}
 	
-	public void ApplyMaterialsChanges()
+	public void SwapCardMaterial()
 	{
-		GetComponent<SpriteRenderer>().sharedMaterial = frontMat;
+		currentMatIndex = Mathf.Abs(currentMatIndex - 1);
+		SpriteRenderer rnd = GetComponent<SpriteRenderer>();
+		rnd.sharedMaterial = (currentMatIndex == 0) ? frontMat : backMat; 
 	}
 
 	public int GetCardValue()
@@ -68,5 +84,27 @@ public class CardBehaviour : MonoBehaviour
 	public CardSuits GetCardSuits()
 	{
 		return suits;
+	}
+
+	public void ReplaceCard()
+	{
+		if(!currentlyMoving)
+			StartCoroutine(GoToPosition());
+	}
+
+	IEnumerator GoToPosition()
+	{
+		currentlyMoving = true;
+
+		while((transform.position - AnchorPoint).magnitude > 0.001f)
+		{
+			transform.position = Vector3.MoveTowards(transform.position, AnchorPoint, 0.5f);
+			//Vector3 dir = (AnchorPoint - transform.position).normalized;	
+			//transform.position += dir * Time.deltaTime * cardAnimSpeed;
+			yield return null;
+		}
+
+		currentlyMoving = false;
+		transform.position = AnchorPoint;
 	}
 }

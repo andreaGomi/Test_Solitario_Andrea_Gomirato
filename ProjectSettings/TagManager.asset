@@ -8,6 +8,8 @@ TagManager:
   - Tableau
   - Card
   - Stock
+  - Waste
+  - Deck
   layers:
   - Default
   - TransparentFX

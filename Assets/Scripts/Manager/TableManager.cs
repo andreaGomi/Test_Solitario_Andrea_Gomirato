@@ -5,47 +5,47 @@ using UnityEngine;
 
 public class TableManager : MonoBehaviour
 {
-
-	[SerializeField] RectTransform tableau;
-	[SerializeField] RectTransform pile;
-	[SerializeField] RectTransform foundation;
-
-	private CardBehaviour cardHelded = null;
-
-    // Start is called before the first frame update
+	private GameObject cardHelded = null;
+	
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
 		ManageInput();
+		//Debug.Log(cardHelded);
     }
 
 	private void ManageInput()
 	{
 		if (Input.GetMouseButton(0))
 		{
+			Vector3 mousePosWS = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
 			if (!cardHelded)
 			{
-				//Vector3 mousePosWS = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y)); 
-				Vector3 mousePosWS = Camera.main.ScreenToWorldPoint(Input.mousePosition); 
 				RaycastHit2D hit = Physics2D.Raycast(mousePosWS, Vector2.zero);
-
-				if(hit)
-				{
-					Debug.Log("Hit: " + hit.collider.tag);
-				}
-				else
-				{
-					Debug.Log("No Hit");
+				if (hit && hit.collider.CompareTag("Card")){
+					cardHelded = hit.collider.gameObject;
+					cardHelded.GetComponent<CardBehaviour>().IsCurrentlyHelded = true;
+					cardHelded.GetComponent<SpriteRenderer>().sortingOrder = 1;
 				}
 			}
+			else
+			{
+				cardHelded.transform.position = mousePosWS;
+			}
 		}
-		else if (cardHelded)
+		else
 		{
+			if (!cardHelded)
+				return;
+
+			cardHelded.GetComponent<SpriteRenderer>().sortingOrder = 0;
+			CardBehaviour currentCard = cardHelded.GetComponent<CardBehaviour>();
+			currentCard.ReplaceCard();
+			currentCard.IsCurrentlyHelded = false;
 			cardHelded = null;
 		}
 	}
